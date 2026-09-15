@@ -274,21 +274,21 @@ function animateIdle () {
 function setLevelTileMap (level: number) {
     clearGame()
     if (level == 0) {
-        tiles.setTilemap(tilemap`level`)
+        tiles.setTilemap(tilemap`nivel8`)
     } else if (level == 1) {
-        tiles.setTilemap(tilemap`level_0`)
+        tiles.setTilemap(tilemap`nivel7`)
     } else if (level == 2) {
-        tiles.setTilemap(tilemap`level_1`)
+        tiles.setTilemap(tilemap`nivel6`)
     } else if (level == 3) {
-        tiles.setTilemap(tilemap`level_2`)
+        tiles.setTilemap(tilemap`nivel5`)
     } else if (level == 4) {
-        tiles.setTilemap(tilemap`level_3`)
+        tiles.setTilemap(tilemap`nivel4`)
     } else if (level == 5) {
-        tiles.setTilemap(tilemap`level_4`)
+        tiles.setTilemap(tilemap`nivel3`)
     } else if (level == 6) {
-        tiles.setTilemap(tilemap`level_5`)
+        tiles.setTilemap(tilemap`nivel2`)
     } else if (level == 7) {
-        tiles.setTilemap(tilemap`level_6`)
+        tiles.setTilemap(tilemap`nivel1`)
     }
     initializeLevel(level)
 }
@@ -703,17 +703,6 @@ function clearGame () {
         value4.destroy()
     }
 }
-scene.onOverlapTile(SpriteKind.Player, assets.tile`tile1`, function (sprite, location) {
-    info.changeLifeBy(1)
-    currentLevel += 1
-    if (hasNextLevel()) {
-        game.splash("Next level unlocked!")
-        setLevelTileMap(currentLevel)
-    } else {
-        game.setGameOverEffect(true, effects.confetti)
-        game.gameOver(true)
-    }
-})
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Flier, function (sprite, otherSprite) {
     info.changeLifeBy(-1)
     sprite.say("Ow!", invincibilityPeriod * 1.5)
@@ -722,7 +711,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Flier, function (sprite, otherSp
 })
 function createEnemies () {
     // enemy that moves back and forth
-    for (let value5 of tiles.getTilesByType(assets.tile`tile4`)) {
+    for (let value5 of tiles.getTilesByType(assets.tile`transparency16`)) {
         bumper = sprites.create(img`
             . . . . . . . . . . . c c c c c 
             . . . . . . . . . c c 7 7 7 6 c 
@@ -742,7 +731,7 @@ function createEnemies () {
             . f f f f f f f f f c c c . . . 
             `, SpriteKind.Bumper)
         tiles.placeOnTile(bumper, value5)
-        tiles.setTileAt(value5, assets.tile`tile0`)
+        tiles.setTileAt(value5, assets.tile`transparency16`)
         bumper.ay = gravity
         if (Math.percentChance(50)) {
             bumper.vx = Math.randomRange(30, 60)
@@ -751,7 +740,7 @@ function createEnemies () {
         }
     }
     // enemy that flies at player
-    for (let value6 of tiles.getTilesByType(assets.tile`tile7`)) {
+    for (let value6 of tiles.getTilesByType(assets.tile`transparency16`)) {
         flier = sprites.create(img`
             . f f f . . . . . . . . f f f . 
             f f c . . . . . . . f c b b c . 
@@ -771,7 +760,7 @@ function createEnemies () {
             . . . f f f f f f f . . . . . . 
             `, SpriteKind.Flier)
         tiles.placeOnTile(flier, value6)
-        tiles.setTileAt(value6, assets.tile`tile0`)
+        tiles.setTileAt(value6, assets.tile`transparency16`)
         animation.attachAnimation(flier, flierFlying)
         animation.attachAnimation(flier, flierIdle)
     }
@@ -800,17 +789,28 @@ function createPlayer (player2: Sprite) {
 }
 function initializeLevel (level: number) {
     effects.clouds.startScreenEffect()
-    playerStartLocation = tiles.getTilesByType(assets.tile`tile6`)[0]
+    playerStartLocation = tiles.getTilesByType(assets.tile`transparency16`)[0]
     tiles.placeOnTile(hero, playerStartLocation)
-    tiles.setTileAt(playerStartLocation, assets.tile`tile0`)
+    tiles.setTileAt(playerStartLocation, assets.tile`transparency16`)
     createEnemies()
     spawnGoals()
 }
+scene.onOverlapTile(SpriteKind.Player, assets.tile`transparency16`, function (sprite, location) {
+    info.changeLifeBy(1)
+    currentLevel += 1
+    if (hasNextLevel()) {
+        game.splash("Next level unlocked!")
+        setLevelTileMap(currentLevel)
+    } else {
+        game.setGameOverEffect(true, effects.confetti)
+        game.gameOver(true)
+    }
+})
 function hasNextLevel () {
     return currentLevel != levelCount
 }
 function spawnGoals () {
-    for (let value7 of tiles.getTilesByType(assets.tile`tile5`)) {
+    for (let value7 of tiles.getTilesByType(assets.tile`transparency16`)) {
         coin = sprites.create(img`
             . . . . . . . . . . . . . . . . 
             . . . . . . . . . . . . . . . . 
@@ -832,7 +832,7 @@ function spawnGoals () {
         tiles.placeOnTile(coin, value7)
         animation.attachAnimation(coin, coinAnimation)
         animation.setAction(coin, ActionKind.Walking)
-        tiles.setTileAt(value7, assets.tile`tile0`)
+        tiles.setTileAt(value7, assets.tile`transparency16`)
     }
 }
 let heroFacingLeft = false
